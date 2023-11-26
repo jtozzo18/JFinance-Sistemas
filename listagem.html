@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap 5-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Ícones Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Para consultar a lista de ícones, acesse: https://icons.getbootstrap.com/ -->
+    <!-- CSS -->
+    <link href="css/estilo.css" rel="stylesheet" />
+    <link href="images/logojota_ico.png" rel="icon" type="image/png" />
+    <title>Financeiro</title>
+</head>
+
+<body onload="verificaLogado();carregaFinanca()">
+    <!--Barra de Navegação-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand text-warning" href="#">JFINANCE</a>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link  active" aria-current="page" href="menu.html"><i class="bi bi-house"></i>
+                            Início</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="financeiro.html"><i class="bi bi-coin"></i> Financeiro</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="listagem.html"><i class="bi bi-list"></i> Listagem</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contato.html"><i class="bi bi-telephone-forward"></i> Fale Conosco</a>
+                    </li>
+                    
+                </ul>
+                
+                <form class="d-flex">
+
+                    <div id="imagemUsuario">
+                    </div>
+
+                    <button class="btn btn-warning m-1" type="button"  onclick="baixarDados()">Baixar Dados da Tabela</button>
+                    <button class="btn btn-light m-1" type="button" onclick="logoutFirebase()">
+                        <i class="bi bi-box-arrow-right"></i> Logout</button>
+
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    <form id="formDespesa" method="post" class="shadow-lg p-4">
+        <!--Tabela para os dados inseridos-->
+        <div class="row mb-5">
+            <div class="text-dark mt-1 text-center">
+                
+                <h4 class="text-dark text-center mt-3"> <i class="bi bi-list"></i> L001 - Listagem de Despesas </h4>
+                
+                <table class="table table-bordered shadow-lg mt-4">
+                    <thead>
+                        <tr class="table-secondary">
+                            <th>Descricao</th>
+                            <th>Valor</th>
+                            <th>Categoria</th>
+                            <th>Data</th>
+                            <th>Despesa recorrente</th>
+                            <th>Exclusão de Registro</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dadosTabela"></tbody>
+                </table>
+
+            </div>
+        </div>
+    </form>
+
+    
+
+    </div>
+    <!--Rodapé-->
+    <footer class="fixed-bottom bg-dark text-white text-center">
+        <div class="container my-2">
+            &copy; 2023 JFinance - Todos os direitos reservados
+        </div>
+    </footer>
+    <!-- Carregando os scripts do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.7/firebase-storage-compat.js"></script>
+    <!--script do projeto -->
+    <script src="js/firebase.js"></script>
+    <script>
+        //obtendo a referencia do campo
+        const descricaoInput = document.getElementById('descricao');
+        const categoriaInput = document.getElementById('categoria');
+        const dataInput = document.getElementById('data');
+        const recorrenteInput = document.getElementById('recorrente');
+
+        //MUDAR O FOCO PARA O BOTÃO SALVAR
+        document.getElementById('salvar').focus()
+
+    </script>
+    <script>
+        function baixarDados() {
+            // Aqui você pode obter os dados da tabela e formatá-los para download
+            const tabela = document.getElementById('dadosTabela'); // Obtém a tabela
+    
+            // Cria um objeto para conter os dados no formato desejado
+            let dadosParaDownload = '';
+    
+            // Itera sobre as linhas da tabela e adiciona os dados ao objeto
+            for (let i = 0; i < tabela.rows.length; i++) {
+                for (let j = 0; j < tabela.rows[i].cells.length; j++) {
+                    dadosParaDownload += tabela.rows[i].cells[j].innerText + '\t'; // Adiciona cada célula separada por tabulação
+                }
+                dadosParaDownload += '\n'; // Adiciona uma quebra de linha entre as linhas da tabela
+            }
+    
+            // Cria um elemento <a> temporário para iniciar o download
+            const downloadLink = document.createElement('a');
+            downloadLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(dadosParaDownload);
+            downloadLink.download = 'jfinance_relatorio.txt'; // Nome do arquivo a ser baixado
+    
+            downloadLink.style.display = 'none';
+            document.body.appendChild(downloadLink);
+    
+            downloadLink.click();
+    
+            document.body.removeChild(downloadLink);
+        }
+    </script>
+</body>
+
+</html>

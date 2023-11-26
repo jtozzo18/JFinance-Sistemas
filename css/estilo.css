@@ -1,0 +1,12 @@
+/* estilo do projeto*/
+.login{
+    width: 100%;
+    height: 100vh; /*VIEWPORT - ÁREA DE VISUALIZAÇÃO*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url(https://blog.unicep.edu.br/wp-content/uploads/2023/05/iStock-1186614184.jpg);
+    background-size: cover;
+}
+
